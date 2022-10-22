@@ -27,26 +27,27 @@ end)
 
 function RobAtm()
 	local pos = GetEntityCoords(PlayerPedId())
+    local hasItem = QBCore.Functions.HasItem('trojan_usb')
+
 	if LocalPlayer.state.isLoggedIn then
 		QBCore.Functions.TriggerCallback("mt-atmrobbery:Cooldown", function(cooldown)
 			if not cooldown then
 				if CurrentCops >= 0 then
-					QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasItem)
-						if hasItem then
-							PoliceCall()
-							local minigame = exports['hackingminigame']:Open()   
-                               if(minigame == true) then -- success
-							   ClearPedTasksImmediately(PlayerPedId())
-							   HackSuccess() 
-							else
-								Citizen.Wait(1000)
-							    ClearPedTasksImmediately(PlayerPedId())
-								HackFailed()
-							end
-						else
-							QBCore.Functions.Notify("You need a Trojan USB to hack this", "error")
-						end
-					end, "trojan_usb")
+                    if hasItem then
+                        PoliceCall()
+                        exports['ps-ui']:Scrambler(function(success)  
+                            if success then
+                                ClearPedTasksImmediately(PlayerPedId())
+                                HackSuccess() 
+                            else
+                                Citizen.Wait(1000)
+                                ClearPedTasksImmediately(PlayerPedId())
+                                HackFailed()
+                            end
+                        end, "numeric", 30, 0)
+                    else
+                        QBCore.Functions.Notify("You need a Trojan USB to hack this", "error")
+                    end
 				else
 					QBCore.Functions.Notify("not enough police", "error")
 				end
