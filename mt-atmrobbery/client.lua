@@ -100,7 +100,7 @@ end
 function HackFailed()
 	QBCore.Functions.Notify("failed?")
     if math.random(1, 100) <= 40 then
-		TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+		TriggerServerEvent("evidence:server:CreateFingerDrop", GetPedBoneCoords(PlayerPedId))
 		QBCore.Functions.Notify("You leave fingerprints at the ATM...")
 	end
 end
